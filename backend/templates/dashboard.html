@@ -29,5 +29,17 @@ RuneMind | Dashboard
         </button>
     </section>
 
+    <div style="margin-top: 24px;">
+        <button id="logout-button" class="rm-button" type="button">
+            Logout
+        </button>
+
+        <p id="logout-message" role="status" aria-live="polite"></p>
+    </div>
+
 </main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/logout.js') }}"></script>
 {% endblock %}

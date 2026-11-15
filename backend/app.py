@@ -249,6 +249,16 @@ def logout():
 # 10. DASHBOARD PAGE
 # ==========================================
 
+
+@app.get("/login")
+def login_page():
+    return render_template("login.html")
+
+
+@app.get("/register")
+def register_page():
+    return render_template("register.html")
+
 @app.get("/dashboard")
 @login_required
 def dashboard():

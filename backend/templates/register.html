@@ -1,0 +1,66 @@
+
+{% extends "base.html" %}
+
+{% block title %}Register - RuneMind{% endblock %}
+
+{% block content %}
+
+<main class="auth-container">
+    <section class="rm-panel auth-panel">
+
+        <h1>RuneMind</h1>
+        <h2>Create an Account</h2>
+
+        <form id="register-form">
+
+            <label for="username">Username</label>
+            <input
+                type="text"
+                id="username"
+                name="username"
+                class="rm-input"
+                maxlength="50"
+                required
+            >
+
+            <label for="email">Email</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                class="rm-input"
+                maxlength="120"
+                required
+            >
+
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                class="rm-input"
+                minlength="8"
+                required
+            >
+
+            <p id="message" role="status" aria-live="polite"></p>
+
+            <button type="submit" class="rm-button">
+                Register
+            </button>
+
+        </form>
+
+        <p>
+            Already have an account?
+            <a href="/login">Login here</a>
+        </p>
+
+    </section>
+</main>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/register.js') }}"></script>
+{% endblock %}
