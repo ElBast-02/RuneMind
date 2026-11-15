@@ -1,7 +1,7 @@
 
 import os
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from flask_login import (
     LoginManager,
     login_user,
@@ -243,9 +243,21 @@ def logout():
         "message": "Logged out successfully"
     }), 200
 
+# ==========================================
+# 10. DASHBOARD PAGE
+# ==========================================
+
+@app.get("/dashboard")
+@login_required
+def dashboard():
+    return render_template(
+        "dashboard.html",
+        username=current_user.username
+    )
+
 
 # ==========================================
-# 10. START FLASK SERVER
+# 11. START FLASK SERVER
 # ==========================================
 
 if __name__ == "__main__":

@@ -1,0 +1,33 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+RuneMind | Dashboard
+{% endblock %}
+
+{% block content %}
+<main style="max-width: 1100px; margin: 60px auto; padding: 20px;">
+
+    <header>
+        <h1 style="color: var(--color-gold);">
+            RuneMind
+        </h1>
+        <p>The Elden Companion</p>
+    </header>
+
+    <section class="rm-panel">
+        <h2>Welcome, {{ username }}</h2>
+
+        <p>
+            Plan your build, analyze your gear,
+            and forge a stronger path through
+            the Lands Between.
+        </p>
+
+        <button class="rm-button" type="button" disabled>
+            Build Planner — Coming Soon
+        </button>
+    </section>
+
+</main>
+{% endblock %}
