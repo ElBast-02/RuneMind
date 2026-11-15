@@ -25,4 +25,8 @@ jobs:
 
       - name: Check Python syntax
         run: |
-          python -m compileall -q backend
+          python -m compileall -q backend tests
+
+      - name: Run automated tests
+        run: |
+          python -m unittest discover -s tests -v

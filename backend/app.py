@@ -24,7 +24,9 @@ app.config["SECRET_KEY"] = os.environ.get(
     "SECRET_KEY", "dev-only-change-before-deployment"
 )
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///runemind.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
+    "DATABASE_URL", "sqlite:///runemind.db"
+)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 app.config["SESSION_COOKIE_HTTPONLY"] = True
