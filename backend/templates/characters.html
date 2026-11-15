@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}
+RuneMind | My Characters
+{% endblock %}
+
+{% block content %}
+<main style="max-width: 900px; margin: 60px auto; padding: 20px;">
+
+    <header>
+        <h1 style="color: var(--color-gold);">
+            My Characters
+        </h1>
+
+        <p>
+            Create and manage your Elden Ring characters.
+        </p>
+
+        <a href="{{ url_for('dashboard') }}">
+            Back to Dashboard
+        </a>
+    </header>
+
+    <section class="rm-panel" style="margin-top: 30px;">
+
+        <h2>Create Character</h2>
+
+        <form id="character-form">
+
+            <label for="name">Character Name</label>
+            <input
+                class="rm-input"
+                type="text"
+                id="name"
+                name="name"
+                maxlength="100"
+                required
+            >
+
+            <label for="vigor">Vigor</label>
+            <input
+                class="rm-input"
+                type="number"
+                id="vigor"
+                name="vigor"
+                min="1"
+                max="99"
+                required
+            >
+
+            <label for="strength">Strength</label>
+            <input
+                class="rm-input"
+                type="number"
+                id="strength"
+                name="strength"
+                min="1"
+                max="99"
+                required
+            >
+
+            <label for="dexterity">Dexterity</label>
+            <input
+                class="rm-input"
+                type="number"
+                id="dexterity"
+                name="dexterity"
+                min="1"
+                max="99"
+                required
+            >
+
+            <button class="rm-button" type="submit">
+                Save Character
+            </button>
+
+        </form>
+
+        <p id="character-message"
+           role="status"
+           aria-live="polite">
+        </p>
+
+    </section>
+
+    <section class="rm-panel" style="margin-top: 30px;">
+
+        <h2>Saved Characters</h2>
+
+        <div id="character-list">
+            <p>Your saved characters will appear here.</p>
+        </div>
+
+    </section>
+
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/characters.js') }}"></script>
+{% endblock %}

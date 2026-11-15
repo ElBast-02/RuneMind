@@ -11,14 +11,17 @@ from flask_login import (
 )
 from sqlalchemy.exc import IntegrityError
 
-from models import db, User
+from models import db, User, Character
 
 
 # ==========================================
 # 1. INITIALIZE FLASK
 # ==========================================
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    instance_path=os.path.abspath("instance")
+)
 
 app.config["SECRET_KEY"] = os.environ.get(
     "SECRET_KEY", "dev-only-change-before-deployment"
@@ -27,6 +30,7 @@ app.config["SECRET_KEY"] = os.environ.get(
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
     "DATABASE_URL", "sqlite:///runemind.db"
 )
+
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 app.config["SESSION_COOKIE_HTTPONLY"] = True
@@ -245,10 +249,98 @@ def logout():
         "message": "Logged out successfully"
     }), 200
 
+
 # ==========================================
-# 10. DASHBOARD PAGE
+# 10. CREATE CHARACTER API
 # ==========================================
 
+@app.post("/api/characters")
+@login_required
+def create_character():
+    data = request.get_json(silent=True)
+
+    if not isinstance(data, dict):
+        return jsonify({
+            "error": "A JSON object is required"
+        }), 400
+
+    name = data.get("name")
+    attributes = ["vigor", "strength", "dexterity"]
+
+    # Validate character name
+    if not isinstance(name, str) or not name.strip():
+        return jsonify({
+            "error": "Character name is required"
+        }), 400
+
+    name = name.strip()
+
+    if len(name) > 100:
+        return jsonify({
+            "error": "Character name must not exceed 100 characters"
+        }), 400
+
+    # Validate character attributes
+    for attribute in attributes:
+        value = data.get(attribute)
+
+        if type(value) is not int:
+            return jsonify({
+                "error": f"{attribute.capitalize()} must be an integer"
+            }), 400
+
+        if not 1 <= value <= 99:
+            return jsonify({
+                "error": f"{attribute.capitalize()} must be between 1 and 99"
+            }), 400
+
+    # Associate the character with the logged-in user
+    character = Character(
+        user_id=current_user.id,
+        name=name,
+        vigor=data["vigor"],
+        strength=data["strength"],
+        dexterity=data["dexterity"]
+    )
+
+    db.session.add(character)
+    db.session.commit()
+
+    return jsonify({
+        "message": "Character saved successfully",
+        "character_id": character.id,
+        "name": character.name
+    }), 201
+
+
+# ==========================================
+# 11. RETRIEVE SAVED CHARACTERS API
+# ==========================================
+
+@app.get("/api/characters")
+@login_required
+def get_characters():
+    characters = Character.query.filter_by(
+        user_id=current_user.id
+    ).order_by(Character.id.asc()).all()
+
+    return jsonify({
+        "characters": [
+            {
+                "id": character.id,
+                "name": character.name,
+                "vigor": character.vigor,
+                "strength": character.strength,
+                "dexterity": character.dexterity
+            }
+            for character in characters
+        ]
+    }), 200
+
+
+# ==========================================
+# 12. LOGIN AND REGISTRATION PAGES
+# ==========================================
 
 @app.get("/login")
 def login_page():
@@ -258,6 +350,11 @@ def login_page():
 @app.get("/register")
 def register_page():
     return render_template("register.html")
+
+
+# ==========================================
+# 13. DASHBOARD PAGE
+# ==========================================
 
 @app.get("/dashboard")
 @login_required
@@ -269,7 +366,17 @@ def dashboard():
 
 
 # ==========================================
-# 11. START FLASK SERVER
+# 14. CHARACTER ATTRIBUTES PAGE
+# ==========================================
+
+@app.get("/characters")
+@login_required
+def characters_page():
+    return render_template("characters.html")
+
+
+# ==========================================
+# 15. START FLASK SERVER
 # ==========================================
 
 if __name__ == "__main__":
