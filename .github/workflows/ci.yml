@@ -21,7 +21,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install flask flask-sqlalchemy flask-login
+          python -m pip install flask flask-sqlalchemy flask-login ruff
+
+      - name: Run Ruff linting
+        run: |
+          python -m ruff check backend tests --select E4,E7,E9,F
 
       - name: Check Python syntax
         run: |

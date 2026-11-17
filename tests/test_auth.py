@@ -16,7 +16,7 @@ os.environ["DATABASE_URL"] = (
     "sqlite:///" + str(Path(test_db.name) / "test.db").replace("\\", "/")
 )
 
-from app import app, db, User
+from app import app, db, User # noqa: E402
 
 
 class AuthenticationTests(unittest.TestCase):

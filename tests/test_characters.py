@@ -1,7 +1,7 @@
 
 import unittest
 
-from test_auth import app, db, User
+from test_auth import app, db
 
 
 class CharacterTests(unittest.TestCase):
